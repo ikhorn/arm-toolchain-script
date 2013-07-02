@@ -141,7 +141,7 @@ if ! [ -f "$SRC/$GCC/install-sh" ]; then
 fi
 
 cd build
-../$GCC/configure --target=$TARGET --prefix=$PREFIX --enable-interwork \
+../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
 --enable-multilib --enable-languages="c" --with-newlib \
 --without-headers --disable-shared --disable-nls --with-gnu-as --with-gnu-ld
 
