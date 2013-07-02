@@ -160,7 +160,30 @@ make install-gcc
 cd ..
 rm -rf build/*
 
+#-------------------------------------------------------------------------------
+# newlib
+#-------------------------------------------------------------------------------
 
+echo
+echo "Building newlib"
+echo
+
+if ! [ -f "$SRC/$NEWLIB/install-sh" ]; then
+	echo
+	echo "Extracting newlib"
+	echo
+	tar xfz $SRC/$NEWLIB.tar.gz
+fi
+
+cd build
+../$NEWLIB/configure --target=$TARGET --prefix=$OUT --enable-interwork \
+--enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
+
+make
+make install
+
+cd ..
+rm -rf build/*
 
 
 
