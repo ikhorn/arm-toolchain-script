@@ -112,12 +112,17 @@ mkdir -vp build
 # binutils
 #-------------------------------------------------------------------------------
 
-echo "Building binutils"
-echo
 
 if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
+	echo
+	echo "Extracting binutils"
+	echo
 	tar xfj $SRC/$BINUTILS.tar.bz2
 fi
+
+echo
+echo "Building binutils"
+echo
 
 cd build
 ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
@@ -133,10 +138,14 @@ rm -rf build/*
 # gcc
 #-------------------------------------------------------------------------------
 
+echo
 echo "Building GCC pass 1"
 echo
 
 if ! [ -f "$SRC/$GCC/install-sh" ]; then
+	echo
+	echo "Extracting binutils"
+	echo
 	tar xfj $SRC/$GCC.tar.bz2
 fi
 
