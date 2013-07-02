@@ -1,0 +1,96 @@
+#!/bin/bash
+# Script to built arm toolchain: binutils, gcc, newlib, gdb
+# Automatically download versions needed for building if needed
+
+#-------------------------------------------------------------------------------
+# Settings
+#-------------------------------------------------------------------------------
+
+TARGET="arm-none-eabi"
+SRC="$HOME/arm-toolchain-sources"
+BIN="~/opt/arm-none-eabi"
+
+BINUTILS=binutils-2.22
+GCC=gcc-4.6.2
+NEWLIB=newlib-1.19.0
+
+#if not set it will not be assembled
+#GMP=gmp-5.0.1
+#MPFR=mpfr-3.0.0
+#MPC=mpc-0.8.2
+#GDB=gdb-6.8
+
+THREADS=6
+
+mkdir -vp $SRC
+cd $SRC
+
+echo
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "Downloading source packages. This may take a while."
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo
+
+# if already present don't download
+if ! [ -f "$BINUTILS/install-sh" ]; then
+	if ! [ -f "$BINUTILS.tar.bz2" ]; then
+		echo; echo "Downloading the binutils ..."; echo
+		wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2
+	fi
+fi
+
+if ! [ -f "$GCC/install-sh" ]; then
+	if ! [ -f "$GCC.tar.bz2" ]; then
+		echo; echo "Downloading the gcc ..."; echo
+		wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2
+	fi
+fi
+
+if [ "$GMP" != "" ]; then
+	if ! [ -f "$GMP/install-sh" ]; then
+		if ! [ -f "$GMP.tar.bz2" ]; then
+			echo; echo "Downloading the gmp ..."; echo
+			wget -c ftp://ftp.gmplib.org/pub/$GMP/$GMP.tar.bz2
+		fi
+	fi
+fi
+
+if [ "$MPFR" != "" ]; then
+	if ! [ -f "$MPFR/install-sh" ]; then
+		if ! [ -f "$MPFR.tar.bz2" ]; then
+			echo; echo "Downloading the mpfr ..."; echo
+			wget -c http://www.mpfr.org/mpfr-current/$MPFR.tar.bz2
+		fi
+	fi
+fi
+
+if [ "$MPC" != "" ]; then
+	if ! [ -f "$MPC/install-sh" ]; then
+		if ! [ -f "$MPC.tar.gz" ]; then
+			echo; echo "Downloading the mpc ..."; echo
+			wget -c http://www.multiprecision.org/mpc/download/$MPC.tar.gz
+		fi
+	fi
+fi
+
+if ! [ -f "$NEWLIB/install-sh" ]; then
+	if ! [ -f "$NEWLIB.tar.gz" ]; then
+		echo; echo "Downloading the newlib ..."; echo
+		wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz
+	fi
+fi
+
+if [ "$GDB" != "" ]; then
+	if ! [ -f "$GDB/install-sh" ]; then
+		if ! [ -f "$GDB.tar.bz2" ]; then
+			echo; echo "Downloading the gdb ..."; echo
+			wget -c ftp://ftp.gnu.org/gnu/gdb/$GDB.tar.bz2
+		fi
+	fi
+fi
+
+echo
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo "All packeges are present"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo
