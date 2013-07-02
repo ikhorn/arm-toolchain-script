@@ -3,12 +3,12 @@
 # Automatically download versions needed for building if needed
 
 #-------------------------------------------------------------------------------
-# Settings
+# settings
 #-------------------------------------------------------------------------------
 
 TARGET="arm-none-eabi"
 SRC="$HOME/arm-toolchain-sources"
-BIN="~/opt/arm-none-eabi"
+OUT="$HOME/opt/arm-none-eabi"
 
 BINUTILS=binutils-2.22
 GCC=gcc-4.6.2
@@ -20,15 +20,17 @@ NEWLIB=newlib-1.19.0
 #MPC=mpc-0.8.2
 #GDB=gdb-6.8
 
-THREADS=6
+#THREADS=6
 
 mkdir -vp $SRC
 cd $SRC
 
+#-------------------------------------------------------------------------------
+# downloading
+#-------------------------------------------------------------------------------
+
 echo
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo "Downloading source packages. This may take a while."
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo
 
 # if already present don't download
@@ -90,7 +92,32 @@ if [ "$GDB" != "" ]; then
 fi
 
 echo
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo "All packeges are present"
-echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo
+
+#-------------------------------------------------------------------------------
+# building
+#-------------------------------------------------------------------------------
+
+echo "Starting Build..."
+echo
+rm -rf build
+mkdir -vp build
+
+#-------------------------------------------------------------------------------
+# binutils
+#-------------------------------------------------------------------------------
+
+echo "Building binutils"
+echo
+
+if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
+	tar xfj $SRC/$BINUTILS.tar.bz2
+fi
+
+cd build
+../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
+--enable-interwork --disable-multilib --with-gnu-as \
+--with-gnu-ld --disable-nls --disable-werror
+make
+make install
