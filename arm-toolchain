@@ -15,8 +15,11 @@ GCC=gcc-4.6.2
 NEWLIB=newlib-1.19.0
 
 #if not set it will not be assembled
+GMP=gmp-4.2
 #GMP=gmp-5.0.1
+MPFR=mpfr-2.3.1
 #MPFR=mpfr-3.0.0
+MPC=mpc-0.8.0
 #MPC=mpc-0.8.2
 #GDB=gdb-6.8
 
@@ -61,7 +64,7 @@ if [ "$MPFR" != "" ]; then
 	if ! [ -f "$MPFR/install-sh" ]; then
 		if ! [ -f "$MPFR.tar.bz2" ]; then
 			echo; echo "Downloading the mpfr ..."; echo
-			wget -c http://www.mpfr.org/mpfr-current/$MPFR.tar.bz2
+			wget -c http://mpfr.loria.fr/$MPFR/$MPFR.tar.bz2
 		fi
 	fi
 fi
