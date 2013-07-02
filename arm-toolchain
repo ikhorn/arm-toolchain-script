@@ -101,7 +101,8 @@ echo
 
 echo "Starting Build..."
 echo
-rm -rf build
+
+rm -rf build/*
 mkdir -vp build
 
 #-------------------------------------------------------------------------------
@@ -117,7 +118,38 @@ fi
 
 cd build
 ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
---enable-interwork --disable-multilib --with-gnu-as \
+--enable-interwork --enable-multilib --with-gnu-as \
 --with-gnu-ld --disable-nls --disable-werror
 make
 make install
+
+cd ..
+rm -rf build/*
+
+#-------------------------------------------------------------------------------
+# gcc
+#-------------------------------------------------------------------------------
+
+echo "Building GCC pass 1"
+echo
+
+if ! [ -f "$SRC/$GCC/install-sh" ]; then
+	tar xfj $SRC/$GCC.tar.bz2
+fi
+
+cd build
+../$GCC/configure --target=$TARGET --prefix=$PREFIX --enable-interwork \
+--enable-multilib --enable-languages="c" --with-newlib \
+--without-headers --disable-shared --disable-nls --with-gnu-as --with-gnu-ld
+
+make all-gcc
+make install-gcc
+
+cd ..
+rm -rf build/*
+
+
+
+
+
+rm -rf build
