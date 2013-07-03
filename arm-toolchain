@@ -15,22 +15,22 @@ GCC=gcc-4.6.2
 NEWLIB=newlib-1.19.0
 
 #if not set it will not be assembled
-GMP=gmp-4.2
+#GMP=gmp-4.2
 #GMP=gmp-5.0.1
-MPFR=mpfr-2.3.1
+#MPFR=mpfr-2.3.1
 #MPFR=mpfr-3.0.0
-MPC=mpc-0.8.0
+#MPC=mpc-0.8.0
 #MPC=mpc-0.8.2
 #GDB=gdb-6.8
 
-#THREADS=6
-
-mkdir -vp $SRC
-cd $SRC
+THREADS=6
 
 #-------------------------------------------------------------------------------
 # downloading
 #-------------------------------------------------------------------------------
+
+mkdir -vp $SRC
+cd $SRC
 
 echo
 echo "Downloading source packages. This may take a while."
@@ -126,7 +126,7 @@ echo
 
 cd build
 ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
---enable-interwork --enable-multilib --with-gnu-as \
+--disable-interwork --enable-multilib --with-gnu-as \
 --with-gnu-ld --disable-nls --disable-werror
 make
 make install
@@ -144,17 +144,46 @@ echo
 
 if ! [ -f "$SRC/$GCC/install-sh" ]; then
 	echo
-	echo "Extracting binutils"
+	echo "Extracting gcc"
 	echo
 	tar xfj $SRC/$GCC.tar.bz2
 fi
 
+# the compiler math prereqs
+if [ "$GMP" != "" ]; then
+	if ! [ -f "$GMP/install-sh" ]; then
+		if ! [ -f "$GMP.tar.bz2" ]; then
+			echo; echo "Extracting gmp"; echo
+			tar -jxf $SRC/$GMP.tar.bz2
+		fi
+	fi
+fi
+
+if [ "$MPFR" != "" ]; then
+	if ! [ -f "$MPFR/install-sh" ]; then
+		if ! [ -f "$MPFR.tar.bz2" ]; then
+			echo; echo "Extracting mpfr"; echo
+			tar -jxf $SRC/$MPFR.tar.bz2
+		fi
+	fi
+fi
+
+if [ "$MPC" != "" ]; then
+	if ! [ -f "$MPC/install-sh" ]; then
+		if ! [ -f "$MPC.tar.gz" ]; then
+			echo; echo "Extracting mpc"; echo
+			tar -zxf $SRC/$MPC.tar.gz
+		fi
+	fi
+fi
+
 cd build
+
 ../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
---enable-multilib --enable-languages="c" --with-newlib \
+--disable-multilib --enable-languages="c" --with-newlib \
 --without-headers --disable-shared --disable-nls --with-gnu-as --with-gnu-ld
 
-make all-gcc
+make -jTHREADS all-gcc
 make install-gcc
 
 cd ..
@@ -177,7 +206,7 @@ fi
 
 cd build
 ../$NEWLIB/configure --target=$TARGET --prefix=$OUT --enable-interwork \
---enable-multilib --with-gnu-as --with-gnu-ld --disable-nls
+--disable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 
 make
 make install
