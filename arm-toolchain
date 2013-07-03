@@ -1,6 +1,9 @@
 #!/bin/bash
 # Script to built arm toolchain: binutils, gcc, newlib, gdb
 # Automatically download versions needed for building if needed
+#
+# If mpc, mpfr, gmp are no needed just comment them and they
+# won't be compiled in toolchain
 
 #-------------------------------------------------------------------------------
 # settings
@@ -153,25 +156,11 @@ fi
 cd ..
 rm -rf build/*
 
-#-------------------------------------------------------------------------------
-# gcc
-#-------------------------------------------------------------------------------
-
-echo
-echo "Building GCC pass 1"
-echo
-
-if ! [ -f "$SRC/$GCC/install-sh" ]; then
-	echo; echo "Extracting gcc"; echo
-	if ( tar xfj $SRC/$GCC.tar.bz2 ) then
-		echo -n
-	else
-		echo; echo "Error: Cannot extract gcc, waite a while"; echo
-		exit 1
-	fi
-fi
-
 # the compiler math prereqs
+#-------------------------------------------------------------------------------
+# gmp
+#-------------------------------------------------------------------------------
+
 if [ "$GMP" != "" ]; then
 	if ! [ -f "$GMP/install-sh" ]; then
 		echo; echo "Extracting gmp, waite a while"; echo
@@ -210,6 +199,10 @@ if [ "$GMP" != "" ]; then
 	cd ..
 	rm -rf build/*
 fi
+
+#-------------------------------------------------------------------------------
+# mpfr
+#-------------------------------------------------------------------------------
 
 if [ "$MPFR" != "" ]; then
 	if ! [ -f "$MPFR/install-sh" ]; then
@@ -250,6 +243,10 @@ if [ "$MPFR" != "" ]; then
 	rm -rf build/*
 fi
 
+#-------------------------------------------------------------------------------
+# mpc
+#-------------------------------------------------------------------------------
+
 if [ "$MPC" != "" ]; then
 	if ! [ -f "$MPC/install-sh" ]; then
 		echo; echo "Extracting mpc, waite a while"; echo
@@ -288,6 +285,24 @@ if [ "$MPC" != "" ]; then
 
 	cd ..
 	rm -rf build/*
+fi
+
+#-------------------------------------------------------------------------------
+# gcc pass 1
+#-------------------------------------------------------------------------------
+
+echo
+echo "Building GCC pass 1"
+echo
+
+if ! [ -f "$SRC/$GCC/install-sh" ]; then
+	echo; echo "Extracting gcc"; echo
+	if ( tar xfj $SRC/$GCC.tar.bz2 ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot extract gcc, waite a while"; echo
+		exit 1
+	fi
 fi
 
 cd build
