@@ -113,7 +113,7 @@ mkdir -vp build
 #-------------------------------------------------------------------------------
 
 if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
-	echo; echo "Extracting binutils"; echo
+	echo; echo "Extracting binutils, waite a while"; echo
 	if ( tar xfj $SRC/$BINUTILS.tar.bz2 ) then
 		echo -n
 	else
@@ -128,7 +128,7 @@ echo
 
 cd build
 if ( ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
-     --disable-interwork --enable-multilib --with-gnu-as \
+     --disable-interwork --disable-multilib --with-gnu-as \
      --with-gnu-ld --disable-nls --disable-werror ) then
 	echo -n
 else
@@ -166,7 +166,7 @@ if ! [ -f "$SRC/$GCC/install-sh" ]; then
 	if ( tar xfj $SRC/$GCC.tar.bz2 ) then
 		echo -n
 	else
-		echo; echo "Error: Cannot extract gcc"; echo
+		echo; echo "Error: Cannot extract gcc, waite a while"; echo
 		exit 1
 	fi
 fi
@@ -175,7 +175,7 @@ fi
 if [ "$GMP" != "" ]; then
 	if ! [ -f "$GMP/install-sh" ]; then
 		if ! [ -f "$GMP.tar.bz2" ]; then
-			echo; echo "Extracting gmp"; echo
+			echo; echo "Extracting gmp, waite a while"; echo
 			if ( tar -jxf $SRC/$GMP.tar.bz2 ) then
 				echo -n
 			else
@@ -189,7 +189,7 @@ fi
 if [ "$MPFR" != "" ]; then
 	if ! [ -f "$MPFR/install-sh" ]; then
 		if ! [ -f "$MPFR.tar.bz2" ]; then
-			echo; echo "Extracting mpfr"; echo
+			echo; echo "Extracting mpfr, waite a while"; echo
 			if ( tar -jxf $SRC/$MPFR.tar.bz2 ) then
 				echo -n
 			else
@@ -203,7 +203,7 @@ fi
 if [ "$MPC" != "" ]; then
 	if ! [ -f "$MPC/install-sh" ]; then
 		if ! [ -f "$MPC.tar.gz" ]; then
-			echo; echo "Extracting mpc"; echo
+			echo; echo "Extracting mpc, waite a while"; echo
 			if ( tar -zxf $SRC/$MPC.tar.gz ) then
 				echo -n
 			else
@@ -218,14 +218,15 @@ cd build
 
 if ( ../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
 --disable-multilib --enable-languages="c" --with-newlib \
---without-headers --disable-shared --disable-nls --with-gnu-as --with-gnu-ld ) then
+--without-headers --disable-shared --disable-nls --with-gnu-as \
+--with-gnu-ld ) then
 	echo -n
 else
 	echo; echo "Error: Cannot configure gcc"; echo
 	exit 1
 fi
 
-if ( make -jTHREADS all-gcc ) then
+if ( make -j$THREADS all-gcc ) then
 	echo -n
 else
 	echo; echo "Error: Cannot compile all-gcc"; echo
@@ -251,18 +252,38 @@ echo "Building newlib"
 echo
 
 if ! [ -f "$SRC/$NEWLIB/install-sh" ]; then
-	echo
-	echo "Extracting newlib"
-	echo
-	tar xfz $SRC/$NEWLIB.tar.gz
+	echo; echo "Extracting newlib"; echo
+	if ( tar xfz $SRC/$NEWLIB.tar.gz ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot extract newlib"; echo
+		exit 1
+	fi
 fi
 
 cd build
-../$NEWLIB/configure --target=$TARGET --prefix=$OUT --enable-interwork \
---disable-multilib --with-gnu-as --with-gnu-ld --disable-nls
 
-make
-make install
+if ( ../$NEWLIB/configure --target=$TARGET --prefix=$OUT --enable-interwork \
+     --disable-multilib --with-gnu-as --with-gnu-ld --disable-nls ) then
+	echo -n
+else
+	echo; echo "Error: Cannot configure newlib"; echo
+	exit 1
+fi
+
+if ( make ) then
+	echo -n
+else
+	echo; echo "Error: Cannot make newlib"; echo
+	exit 1
+fi
+
+if ( make install ) then
+	echo -n
+else
+	echo; echo "Error: Cannot install newlib"; echo
+	exit 1
+fi
 
 cd ..
 rm -rf build/*
