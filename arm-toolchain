@@ -44,60 +44,46 @@ echo "Downloading source packages. This may take a while."
 echo
 
 # if already present don't download
-if ! [ -f "$BINUTILS/install-sh" ]; then
-	if ! [ -f "$BINUTILS.tar.bz2" ]; then
-		echo; echo "Downloading the binutils ..."; echo
-		wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2
-	fi
+if ! [ -f "$BINUTILS/install-sh" -o -f "$BINUTILS.tar.bz2" ]; then
+	echo; echo "Downloading the binutils ..."; echo
+	wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2
 fi
 
-if ! [ -f "$GCC/install-sh" ]; then
-	if ! [ -f "$GCC.tar.bz2" ]; then
-		echo; echo "Downloading the gcc ..."; echo
-		wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2
-	fi
+if ! [ -f "$GCC/install-sh" -o -f "$GCC.tar.bz2" ]; then
+	echo; echo "Downloading the gcc ..."; echo
+	wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2
 fi
 
 if [ "$GMP" != "" ]; then
-	if ! [ -f "$GMP/install-sh" ]; then
-		if ! [ -f "$GMP.tar.bz2" ]; then
-			echo; echo "Downloading the gmp ..."; echo
-			wget -c ftp://ftp.gmplib.org/pub/$GMP/$GMP.tar.bz2
-		fi
+	if ! [ -f "$GMP/install-sh" -o -f "$GMP.tar.bz2" ]; then
+		echo; echo "Downloading the gmp ..."; echo
+		wget -c ftp://ftp.gmplib.org/pub/$GMP/$GMP.tar.bz2
 	fi
 fi
 
 if [ "$MPFR" != "" ]; then
-	if ! [ -f "$MPFR/install-sh" ]; then
-		if ! [ -f "$MPFR.tar.bz2" ]; then
-			echo; echo "Downloading the mpfr ..."; echo
-			wget -c http://mpfr.loria.fr/$MPFR/$MPFR.tar.bz2
-		fi
+	if ! [ -f "$MPFR/install-sh" -o -f "$MPFR.tar.bz2" ]; then
+		echo; echo "Downloading the mpfr ..."; echo
+		wget -c http://mpfr.loria.fr/$MPFR/$MPFR.tar.bz2
 	fi
 fi
 
 if [ "$MPC" != "" ]; then
-	if ! [ -f "$MPC/install-sh" ]; then
-		if ! [ -f "$MPC.tar.gz" ]; then
-			echo; echo "Downloading the mpc ..."; echo
-			wget -c http://www.multiprecision.org/mpc/download/$MPC.tar.gz
-		fi
+	if ! [ -f "$MPC/install-sh" -o -f "$MPC.tar.gz" ]; then
+		echo; echo "Downloading the mpc ..."; echo
+		wget -c http://www.multiprecision.org/mpc/download/$MPC.tar.gz
 	fi
 fi
 
-if ! [ -f "$NEWLIB/install-sh" ]; then
-	if ! [ -f "$NEWLIB.tar.gz" ]; then
-		echo; echo "Downloading the newlib ..."; echo
-		wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz
-	fi
+if ! [ -f "$NEWLIB/install-sh" -o -f "$NEWLIB.tar.gz" ]; then
+	echo; echo "Downloading the newlib ..."; echo
+	wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz
 fi
 
 if [ "$GDB" != "" ]; then
-	if ! [ -f "$GDB/install-sh" ]; then
-		if ! [ -f "$GDB.tar.bz2" ]; then
-			echo; echo "Downloading the gdb ..."; echo
-			wget -c ftp://ftp.gnu.org/gnu/gdb/$GDB.tar.bz2
-		fi
+	if ! [ -f "$GDB/install-sh" -o -f "$GDB.tar.bz2" ]; then
+		echo; echo "Downloading the gdb ..."; echo
+		wget -c ftp://ftp.gnu.org/gnu/gdb/$GDB.tar.bz2
 	fi
 fi
 
