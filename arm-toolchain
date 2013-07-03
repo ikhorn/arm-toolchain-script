@@ -112,12 +112,14 @@ mkdir -vp build
 # binutils
 #-------------------------------------------------------------------------------
 
-
 if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
-	echo
-	echo "Extracting binutils"
-	echo
-	tar xfj $SRC/$BINUTILS.tar.bz2
+	echo; echo "Extracting binutils"; echo
+	if ( tar xfj $SRC/$BINUTILS.tar.bz2 )
+		echo -n;
+	else
+		echo; echo "Error: Cannot extract binutils"; echo
+		exit 1
+	fi
 fi
 
 echo
@@ -125,11 +127,28 @@ echo "Building binutils"
 echo
 
 cd build
-../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
---disable-interwork --enable-multilib --with-gnu-as \
---with-gnu-ld --disable-nls --disable-werror
-make
-make install
+if ( ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
+     --disable-interwork --enable-multilib --with-gnu-as \
+     --with-gnu-ld --disable-nls --disable-werror ) then
+	echo -n;
+else
+	echo; echo "Error: Cannot configure binutils"; echo
+	exit 1
+fi
+
+if ( make ) then
+	echo -n;
+else
+	echo; echo "Error: Cannot make binutils"; echo
+	exit 1
+fi
+
+if ( make install ) then
+	echo -n;
+else
+	echo; echo "Error: Cannot install binutils"; echo
+	exit 1
+fi
 
 cd ..
 rm -rf build/*
