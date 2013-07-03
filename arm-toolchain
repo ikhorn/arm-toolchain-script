@@ -22,7 +22,7 @@ GMP=gmp-4.2
 #GMP=gmp-5.0.1
 MPFR=mpfr-2.3.1
 #MPFR=mpfr-3.0.0
-MPC=mpc-0.8.0
+MPC=mpc-0.8
 #MPC=mpc-0.8.2
 #GDB=gdb-6.8
 
@@ -184,6 +184,7 @@ if [ "$GMP" != "" ]; then
 		fi
 	fi
 
+	rm -rf build_gmp/*
 	mkdir -vp build_gmp
 	cd build
 	if ( ../$GMP/configure --prefix=$SRC/build_gmp --disable-shared \
@@ -234,6 +235,7 @@ if [ "$MPFR" != "" ]; then
 		fi
 	fi
 
+	rm -rf build_mpfr/*
 	mkdir -vp build_mpfr
 	cd build
 	if ( ../$MPFR/configure --prefix=$SRC/build_mpfr \
@@ -284,6 +286,7 @@ if [ "$MPC" != "" ]; then
 		fi
 	fi
 
+	rm -rf build_mpc/*
 	mkdir -vp build_mpc
 	cd build
 	if ( ../$MPC/configure --prefix=$SRC/build_mpc \
