@@ -114,8 +114,8 @@ mkdir -vp build
 
 if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
 	echo; echo "Extracting binutils"; echo
-	if ( tar xfj $SRC/$BINUTILS.tar.bz2 )
-		echo -n;
+	if ( tar xfj $SRC/$BINUTILS.tar.bz2 ) then
+		echo -n
 	else
 		echo; echo "Error: Cannot extract binutils"; echo
 		exit 1
@@ -130,21 +130,21 @@ cd build
 if ( ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
      --disable-interwork --enable-multilib --with-gnu-as \
      --with-gnu-ld --disable-nls --disable-werror ) then
-	echo -n;
+	echo -n
 else
 	echo; echo "Error: Cannot configure binutils"; echo
 	exit 1
 fi
 
 if ( make ) then
-	echo -n;
+	echo -n
 else
 	echo; echo "Error: Cannot make binutils"; echo
 	exit 1
 fi
 
 if ( make install ) then
-	echo -n;
+	echo -n
 else
 	echo; echo "Error: Cannot install binutils"; echo
 	exit 1
@@ -162,10 +162,13 @@ echo "Building GCC pass 1"
 echo
 
 if ! [ -f "$SRC/$GCC/install-sh" ]; then
-	echo
-	echo "Extracting gcc"
-	echo
-	tar xfj $SRC/$GCC.tar.bz2
+	echo; echo "Extracting gcc"; echo
+	if ( tar xfj $SRC/$GCC.tar.bz2 ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot extract gcc"; echo
+		exit 1
+	fi
 fi
 
 # the compiler math prereqs
@@ -173,7 +176,12 @@ if [ "$GMP" != "" ]; then
 	if ! [ -f "$GMP/install-sh" ]; then
 		if ! [ -f "$GMP.tar.bz2" ]; then
 			echo; echo "Extracting gmp"; echo
-			tar -jxf $SRC/$GMP.tar.bz2
+			if ( tar -jxf $SRC/$GMP.tar.bz2 ) then
+				echo -n
+			else
+				echo; echo "Error: Cannot extract gmp"; echo
+				exit 1
+			fi
 		fi
 	fi
 fi
@@ -182,7 +190,12 @@ if [ "$MPFR" != "" ]; then
 	if ! [ -f "$MPFR/install-sh" ]; then
 		if ! [ -f "$MPFR.tar.bz2" ]; then
 			echo; echo "Extracting mpfr"; echo
-			tar -jxf $SRC/$MPFR.tar.bz2
+			if ( tar -jxf $SRC/$MPFR.tar.bz2 ) then
+				echo -n
+			else
+				echo; echo "Error: Cannot extract mpfr"; echo
+				exit 1
+			fi
 		fi
 	fi
 fi
@@ -191,19 +204,40 @@ if [ "$MPC" != "" ]; then
 	if ! [ -f "$MPC/install-sh" ]; then
 		if ! [ -f "$MPC.tar.gz" ]; then
 			echo; echo "Extracting mpc"; echo
-			tar -zxf $SRC/$MPC.tar.gz
+			if ( tar -zxf $SRC/$MPC.tar.gz ) then
+				echo -n
+			else
+				echo; echo "Error: Cannot extract mpc"; echo
+				exit 1
+			fi
 		fi
 	fi
 fi
 
 cd build
 
-../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
+if ( ../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
 --disable-multilib --enable-languages="c" --with-newlib \
---without-headers --disable-shared --disable-nls --with-gnu-as --with-gnu-ld
+--without-headers --disable-shared --disable-nls --with-gnu-as --with-gnu-ld ) then
+	echo -n
+else
+	echo; echo "Error: Cannot configure gcc"; echo
+	exit 1
+fi
 
-make -jTHREADS all-gcc
-make install-gcc
+if ( make -jTHREADS all-gcc ) then
+	echo -n
+else
+	echo; echo "Error: Cannot compile all-gcc"; echo
+	exit 1
+fi
+
+if ( make install-gcc ) then
+	echo -n
+else
+	echo; echo "Error: Cannot install-gcc"; echo
+	exit 1
+fi
 
 cd ..
 rm -rf build/*
