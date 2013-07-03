@@ -114,12 +114,7 @@ echo
 
 if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
 	echo; echo "Extracting binutils, waite a while"; echo
-	if ( tar xfj $SRC/$BINUTILS.tar.bz2 ) then
-		echo -n
-	else
-		echo; echo "Error: Cannot extract binutils"; echo
-		exit 1
-	fi
+	tar xfj $SRC/$BINUTILS.tar.bz2 || exit 1
 fi
 
 cd build
@@ -163,12 +158,7 @@ if [ "$GMP" != "" ]; then
 
 	if ! [ -f "$GMP/install-sh" ]; then
 		echo; echo "Extracting gmp, waite a while"; echo
-		if ( tar -jxf $SRC/$GMP.tar.bz2 ) then
-			echo -n
-		else
-			echo; echo "Error: Cannot extract gmp"; echo
-			exit 1
-		fi
+		tar -jxf $SRC/$GMP.tar.bz2 || exit 1
 	fi
 
 	rm -rf build_gmp/*
@@ -214,12 +204,7 @@ if [ "$MPFR" != "" ]; then
 
 	if ! [ -f "$MPFR/install-sh" ]; then
 		echo; echo "Extracting mpfr, waite a while"; echo
-		if ( tar -jxf $SRC/$MPFR.tar.bz2 ) then
-			echo -n
-		else
-			echo; echo "Error: Cannot extract mpfr"; echo
-			exit 1
-		fi
+		tar -jxf $SRC/$MPFR.tar.bz2 || exit 1
 	fi
 
 	rm -rf build_mpfr/*
@@ -265,12 +250,7 @@ if [ "$MPC" != "" ]; then
 
 	if ! [ -f "$MPC/install-sh" ]; then
 		echo; echo "Extracting mpc, waite a while"; echo
-		if ( tar -zxf $SRC/$MPC.tar.gz ) then
-			echo -n
-		else
-			echo; echo "Error: Cannot extract mpc"; echo
-			exit 1
-		fi
+		tar -zxf $SRC/$MPC.tar.gz || exit 1
 	fi
 
 	rm -rf build_mpc/*
@@ -315,12 +295,7 @@ echo
 
 if ! [ -f "$SRC/$GCC/install-sh" ]; then
 	echo; echo "Extracting gcc"; echo
-	if ( tar xfj $SRC/$GCC.tar.bz2 ) then
-		echo -n
-	else
-		echo; echo "Error: Cannot extract gcc, waite a while"; echo
-		exit 1
-	fi
+	tar xfj $SRC/$GCC.tar.bz2 || exit 1
 fi
 
 cd build
@@ -367,12 +342,7 @@ echo
 
 if ! [ -f "$SRC/$NEWLIB/install-sh" ]; then
 	echo; echo "Extracting newlib"; echo
-	if ( tar xfz $SRC/$NEWLIB.tar.gz ) then
-		echo -n
-	else
-		echo; echo "Error: Cannot extract newlib"; echo
-		exit 1
-	fi
+	tar xfz $SRC/$NEWLIB.tar.gz || exit 1
 fi
 
 cd build
