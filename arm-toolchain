@@ -115,6 +115,12 @@ mkdir -vp build
 # binutils
 #-------------------------------------------------------------------------------
 
+echo
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo ": Building binutils"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo
+
 if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
 	echo; echo "Extracting binutils, waite a while"; echo
 	if ( tar xfj $SRC/$BINUTILS.tar.bz2 ) then
@@ -124,10 +130,6 @@ if ! [ -f "$SRC/$BINUTILS/install-sh" ]; then
 		exit 1
 	fi
 fi
-
-echo
-echo "Building binutils"
-echo
 
 cd build
 if ( ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
@@ -162,6 +164,12 @@ rm -rf build/*
 #-------------------------------------------------------------------------------
 
 if [ "$GMP" != "" ]; then
+	echo
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo ": Building gmp"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo
+
 	if ! [ -f "$GMP/install-sh" ]; then
 		echo; echo "Extracting gmp, waite a while"; echo
 		if ( tar -jxf $SRC/$GMP.tar.bz2 ) then
@@ -205,6 +213,12 @@ fi
 #-------------------------------------------------------------------------------
 
 if [ "$MPFR" != "" ]; then
+	echo
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo ": Building pmfr"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo
+
 	if ! [ -f "$MPFR/install-sh" ]; then
 		echo; echo "Extracting mpfr, waite a while"; echo
 		if ( tar -jxf $SRC/$MPFR.tar.bz2 ) then
@@ -248,6 +262,12 @@ fi
 #-------------------------------------------------------------------------------
 
 if [ "$MPC" != "" ]; then
+	echo
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo ": Building mpc"
+	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+	echo
+
 	if ! [ -f "$MPC/install-sh" ]; then
 		echo; echo "Extracting mpc, waite a while"; echo
 		if ( tar -zxf $SRC/$MPC.tar.gz ) then
@@ -292,7 +312,9 @@ fi
 #-------------------------------------------------------------------------------
 
 echo
-echo "Building GCC pass 1"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo ": Building GCC pass 1"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo
 
 if ! [ -f "$SRC/$GCC/install-sh" ]; then
@@ -308,9 +330,10 @@ fi
 cd build
 
 if ( ../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
---disable-multilib --enable-languages="c" --with-newlib \
---without-headers --disable-shared --disable-nls --with-gnu-as \
---with-gnu-ld ) then
+     --disable-multilib --enable-languages="c" --with-newlib \
+     --without-headers --disable-shared --disable-nls --disable-threads --with-gnu-as \
+     --with-gnu-ld --with-gmp=$SRC/build_gmp --with-mpfr=$SRC/build_mpfr \
+     --with-mpc=$SRC/build_mpc) then
 	echo -n
 else
 	echo; echo "Error: Cannot configure gcc"; echo
@@ -342,7 +365,9 @@ rm -rf build_mpfr
 #-------------------------------------------------------------------------------
 
 echo
-echo "Building newlib"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+echo ": Building newlib"
+echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 echo
 
 if ! [ -f "$SRC/$NEWLIB/install-sh" ]; then
