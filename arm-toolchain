@@ -22,7 +22,7 @@ GMP=gmp-4.2
 #GMP=gmp-5.0.1
 MPFR=mpfr-2.3.1
 #MPFR=mpfr-3.0.0
-MPC=mpc-0.8
+MPC=mpc-0.8.0
 #MPC=mpc-0.8.2
 #GDB=gdb-6.8
 
@@ -145,7 +145,7 @@ else
 	exit 1
 fi
 
-if ( make ) then
+if ( make -j$THREADS ) then
 	echo -n
 else
 	echo; echo "Error: Cannot make binutils"; echo
@@ -194,7 +194,7 @@ if [ "$GMP" != "" ]; then
 		exit 1
 	fi
 
-	if ( make ) then
+	if ( make -j$THREADS ) then
 		echo -n
 	else
 		echo; echo "Error: Cannot make gmp"; echo
@@ -244,7 +244,7 @@ if [ "$MPFR" != "" ]; then
 		exit 1
 	fi
 
-	if ( make ) then
+	if ( make -j$THREADS ) then
 		echo -n
 	else
 		echo; echo "Error: Cannot make mpfr"; echo
@@ -294,7 +294,7 @@ if [ "$MPC" != "" ]; then
 		exit 1
 	fi
 
-	if ( make ) then
+	if ( make -j$THREADS ) then
 		echo -n
 	else
 		echo; echo "Error: Cannot make mpc"; echo
