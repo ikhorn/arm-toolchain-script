@@ -15,11 +15,11 @@ GCC=gcc-4.6.2
 NEWLIB=newlib-1.19.0
 
 #if not set it will not be assembled
-#GMP=gmp-4.2
+GMP=gmp-4.2
 #GMP=gmp-5.0.1
-#MPFR=mpfr-2.3.1
+MPFR=mpfr-2.3.1
 #MPFR=mpfr-3.0.0
-#MPC=mpc-0.8.0
+MPC=mpc-0.8
 #MPC=mpc-0.8.2
 #GDB=gdb-6.8
 
@@ -174,42 +174,36 @@ fi
 # the compiler math prereqs
 if [ "$GMP" != "" ]; then
 	if ! [ -f "$GMP/install-sh" ]; then
-		if ! [ -f "$GMP.tar.bz2" ]; then
-			echo; echo "Extracting gmp, waite a while"; echo
-			if ( tar -jxf $SRC/$GMP.tar.bz2 ) then
-				echo -n
-			else
-				echo; echo "Error: Cannot extract gmp"; echo
-				exit 1
-			fi
+		echo; echo "Extracting gmp, waite a while"; echo
+		if ( tar -jxf $SRC/$GMP.tar.bz2 ) then
+			echo -n
+		else
+			echo; echo "Error: Cannot extract gmp"; echo
+			exit 1
 		fi
 	fi
 fi
 
 if [ "$MPFR" != "" ]; then
 	if ! [ -f "$MPFR/install-sh" ]; then
-		if ! [ -f "$MPFR.tar.bz2" ]; then
-			echo; echo "Extracting mpfr, waite a while"; echo
-			if ( tar -jxf $SRC/$MPFR.tar.bz2 ) then
-				echo -n
-			else
-				echo; echo "Error: Cannot extract mpfr"; echo
-				exit 1
-			fi
+		echo; echo "Extracting mpfr, waite a while"; echo
+		if ( tar -jxf $SRC/$MPFR.tar.bz2 ) then
+			echo -n
+		else
+			echo; echo "Error: Cannot extract mpfr"; echo
+			exit 1
 		fi
 	fi
 fi
 
 if [ "$MPC" != "" ]; then
 	if ! [ -f "$MPC/install-sh" ]; then
-		if ! [ -f "$MPC.tar.gz" ]; then
-			echo; echo "Extracting mpc, waite a while"; echo
-			if ( tar -zxf $SRC/$MPC.tar.gz ) then
-				echo -n
-			else
-				echo; echo "Error: Cannot extract mpc"; echo
-				exit 1
-			fi
+		echo; echo "Extracting mpc, waite a while"; echo
+		if ( tar -zxf $SRC/$MPC.tar.gz ) then
+			echo -n
+		else
+			echo; echo "Error: Cannot extract mpc"; echo
+			exit 1
 		fi
 	fi
 fi
