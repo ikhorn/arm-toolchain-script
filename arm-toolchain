@@ -28,6 +28,10 @@ MPC=mpc-0.8
 
 THREADS=6
 
+GMP_OPT="-bla-bla"
+MPFR_OPT="-bla-bla"
+MPC_OPT="-bla-bla"
+
 #-------------------------------------------------------------------------------
 # downloading
 #-------------------------------------------------------------------------------
@@ -133,7 +137,7 @@ fi
 
 cd build
 if ( ../$BINUTILS/configure --target=$TARGET --prefix=$OUT \
-     --disable-interwork --disable-multilib --with-gnu-as \
+     --disable-interwork --enable-multilib --with-gnu-as \
      --with-gnu-ld --disable-nls --disable-werror ) then
 	echo -n
 else
@@ -206,6 +210,7 @@ if [ "$GMP" != "" ]; then
 
 	cd ..
 	rm -rf build/*
+	GMP_OPT="--with-gmp=$SRC/build_gmp"
 fi
 
 #-------------------------------------------------------------------------------
@@ -232,7 +237,7 @@ if [ "$MPFR" != "" ]; then
 	mkdir -vp build_mpfr
 	cd build
 	if ( ../$MPFR/configure --prefix=$SRC/build_mpfr \
-	     --with-gmp=$SRC/build_gmp --disable-shared --enable-static ) then
+	     $GMP_OPT --disable-shared --enable-static ) then
 		echo -n
 	else
 		echo; echo "Error: Cannot configure mpfr"; echo
@@ -255,6 +260,7 @@ if [ "$MPFR" != "" ]; then
 
 	cd ..
 	rm -rf build/*
+	MPFR_OPT="--with-mpfr=$SRC/build_mpfr"
 fi
 
 #-------------------------------------------------------------------------------
@@ -281,8 +287,7 @@ if [ "$MPC" != "" ]; then
 	mkdir -vp build_mpc
 	cd build
 	if ( ../$MPC/configure --prefix=$SRC/build_mpc \
-	     --with-gmp=$SRC/build_gmp --with-mpfr=$SRC/build_mpfr \
-	     --disable-shared --enable-static ) then
+	     $GMP_OPT $MPFR_OPT --disable-shared --enable-static ) then
 		echo -n
 	else
 		echo; echo "Error: Cannot configure mpc"; echo
@@ -305,6 +310,7 @@ if [ "$MPC" != "" ]; then
 
 	cd ..
 	rm -rf build/*
+	MPC_OPT="--with-mpc=$SRC/build_mpc"
 fi
 
 #-------------------------------------------------------------------------------
@@ -330,10 +336,9 @@ fi
 cd build
 
 if ( ../$GCC/configure --target=$TARGET --prefix=$OUT --enable-interwork \
-     --disable-multilib --enable-languages="c" --with-newlib \
+     --enable-multilib --enable-languages="c" --with-newlib \
      --without-headers --disable-shared --disable-nls --disable-threads --with-gnu-as \
-     --with-gnu-ld --with-gmp=$SRC/build_gmp --with-mpfr=$SRC/build_mpfr \
-     --with-mpc=$SRC/build_mpc) then
+     --with-gnu-ld $GMP_OPT $MPFR_OPT $MPC_OPT) then
 	echo -n
 else
 	echo; echo "Error: Cannot configure gcc"; echo
@@ -383,7 +388,7 @@ fi
 cd build
 
 if ( ../$NEWLIB/configure --target=$TARGET --prefix=$OUT --enable-interwork \
-     --disable-multilib --with-gnu-as --with-gnu-ld --disable-nls ) then
+     --enable-multilib --with-gnu-as --with-gnu-ld --disable-nls ) then
 	echo -n
 else
 	echo; echo "Error: Cannot configure newlib"; echo
