@@ -182,6 +182,33 @@ if [ "$GMP" != "" ]; then
 			exit 1
 		fi
 	fi
+
+	mkdir -vp build_gmp
+	cd build
+	if ( ../$GMP/configure --prefix=$SRC/build_gmp --disable-shared \
+		--enable-static ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot configure gmp"; echo
+		exit 1
+	fi
+
+	if ( make ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot make gmp"; echo
+		exit 1
+	fi
+
+	if ( make install ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot install gmp"; echo
+		exit 1
+	fi
+
+	cd ..
+	rm -rf build/*
 fi
 
 if [ "$MPFR" != "" ]; then
@@ -194,6 +221,33 @@ if [ "$MPFR" != "" ]; then
 			exit 1
 		fi
 	fi
+
+	mkdir -vp build_mpfr
+	cd build
+	if ( ../$MPFR/configure --prefix=$SRC/build_mpfr \
+	     --with-gmp=$SRC/build_gmp --disable-shared --enable-static ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot configure mpfr"; echo
+		exit 1
+	fi
+
+	if ( make ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot make mpfr"; echo
+		exit 1
+	fi
+
+	if ( make install ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot install mpfr"; echo
+		exit 1
+	fi
+
+	cd ..
+	rm -rf build/*
 fi
 
 if [ "$MPC" != "" ]; then
@@ -206,6 +260,34 @@ if [ "$MPC" != "" ]; then
 			exit 1
 		fi
 	fi
+
+	mkdir -vp build_mpc
+	cd build
+	if ( ../$MPC/configure --prefix=$SRC/build_mpc \
+	     --with-gmp=$SRC/build_gmp --with-mpfr=$SRC/build_mpfr \
+	     --disable-shared --enable-static ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot configure mpc"; echo
+		exit 1
+	fi
+
+	if ( make ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot make mpc"; echo
+		exit 1
+	fi
+
+	if ( make install ) then
+		echo -n
+	else
+		echo; echo "Error: Cannot install mpc"; echo
+		exit 1
+	fi
+
+	cd ..
+	rm -rf build/*
 fi
 
 cd build
@@ -236,6 +318,9 @@ fi
 
 cd ..
 rm -rf build/*
+rm -rf build_gmp
+rm -rf build_mpc
+rm -rf build_mpfr
 
 #-------------------------------------------------------------------------------
 # newlib
